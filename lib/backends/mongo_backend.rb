@@ -14,6 +14,9 @@ module Automaton
       @client   = @config[:replicaset] == 'yes' ? MongoReplicaSetClient.new(@hosts) : MongoClient.new(@hosts[0])
       @database = @client[@config[:database]]
 
+      # adding in authentication
+      @database.authenticate(@config[:username], @config[:password]) if @config.has_key? :username
+
       # Set collection names
       @node_collection = @database[@config[:nodecollection]]
       @fact_collection = @database[@config[:factcollection]]
